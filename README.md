@@ -8,7 +8,7 @@ This project provides a backend service for executing algorithms, logging API ca
 - Implements three algorithms: **Binary Search, Quick Sort, BFS (Breadth-First Search)**.
 - Stores logs of all API calls in a **PostgreSQL database**.
 - Provides **API analytics** for insights on usage and performance.
-- Fully deployed on **Render**, accessible via the hosted API link.
+- Fully deployed on **Render**, accessible via the hosted API link via https://digantara-backend.onrender.com/ with /api/binary-search, /api/quick-sort, /api/bfs, /api/logs-from-db, /api/analytics (refer the entire readme file for better understanding).
 - **No local PostgreSQL setup required** if using the deployed version.
 
 ---
