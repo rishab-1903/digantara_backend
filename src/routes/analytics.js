@@ -1,15 +1,19 @@
+require('dotenv').config();  // Load environment variables
+const { Pool } = require('pg');
 const express = require("express");
-const { Pool } = require("pg");
+
 
 const router = express.Router();
 
-// PostgreSQL Connection
+// Automatically detect production vs. local environment
+const isProduction = process.env.DATABASE_URL !== undefined;
+
+// PostgreSQL Connection Setup
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "digantara_logs",
-    password: "Rushi007*",
-    port: 5432,
+    connectionString: isProduction
+        ? process.env.DATABASE_URL  // Use Render's database connection string
+        : "postgres://postgres:Rushi007*@localhost:5432/digantara_logs", // Local database
+    ssl: isProduction ? { rejectUnauthorized: false } : false  // Enable SSL only in production
 });
 
 // API to get log analytics
@@ -24,7 +28,7 @@ router.get("/analytics", async (req, res) => {
         `);
 
         const avgExecutionTime = await pool.query(`
-            SELECT algorithm_name, AVG(EXTRACT(EPOCH FROM (timestamp - now()))) * -1000 AS avg_execution_time
+            SELECT algorithm_name, AVG(EXTRACT(EPOCH FROM (now() - timestamp))) * 1000 AS avg_execution_time
             FROM api_logs
             GROUP BY algorithm_name;
         `);
@@ -36,10 +40,21 @@ router.get("/analytics", async (req, res) => {
         res.json({
             most_used_algorithm: mostUsedAlgorithm.rows[0] || "No data",
             average_execution_time: avgExecutionTime.rows,
-            total_api_calls: totalApiCalls.rows[0].total_calls,
+            total_api_calls: totalApiCalls.rows[0]?.total_calls || 0,
         });
     } catch (error) {
         console.error("Error fetching analytics:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// API to fetch logs from PostgreSQL
+router.get('/logs-from-db', async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM api_logs ORDER BY timestamp DESC LIMIT 50");
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error fetching logs:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
