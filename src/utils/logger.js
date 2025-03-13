@@ -1,9 +1,13 @@
+require('dotenv').config();
 const { Pool } = require('pg');
+
+// Debug: Log DATABASE_URL to verify if it's detected
+console.log("DATABASE_URL:", process.env.DATABASE_URL || "Using local PostgreSQL");
 
 // Automatically detect production vs. local environment
 const isProduction = process.env.DATABASE_URL !== undefined;
 
-// PostgreSQL Connection Setup
+// PostgreSQL Connection Setup (Works for Both Local & Render)
 const pool = new Pool({
     connectionString: isProduction
         ? process.env.DATABASE_URL  // Use Render's database connection string
