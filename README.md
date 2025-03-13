@@ -1,4 +1,4 @@
-# digantara_backend
+# Digantara Backend Developer Assignment 
 # API Logs Backend Service
 
 ## 📌 Overview
@@ -204,10 +204,5 @@ Feel free to contribute:
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a Pull Request.
 
----
-## 📜 License
-This project is licensed under [MIT License](LICENSE).
-
----
 🚀 **Now you are ready to use the API!** Let me know if you need any improvements. 😊
 
