@@ -41,7 +41,7 @@ const pool = new Pool({
 ```sh
 node src/app.js
 ```
-By default, the service will run at **http://localhost:3000**
+By default, the service will run at **http://localhost:<your_port_number>**
 
 #### **Step 5: Test APIs via Postman or Curl**
 Example request using `curl`:
